@@ -275,23 +275,22 @@ jobs:
       - cleanup:
           requires: [cloudfront-update]
 cleanup:
-    docker:
+  #  docker:
       # Docker image here
-    steps:
+    #steps:
       # Checkout code from git
-      - run:
-          name: Get old stack workflow id
-          command: |
+     #    name: Get old stack workflow id
+      #    command: |
             # your code here
-            export OldWorkflowID="the id here"
-            export STACKS=[] #put the list of stacks here
-      - run:
-          name: Remove old stacks and files
-          command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-            then
+       #     export OldWorkflowID="the id here"
+        #    export STACKS=[] #put the list of stacks here
+      #- run:
+       #   name: Remove old stacks and files
+        #  command: |
+         #   if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+          #  then
               # your code here
-            fi
+           # fi
             
 
 workflows:
