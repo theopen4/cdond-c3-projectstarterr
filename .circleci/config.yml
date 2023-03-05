@@ -8,7 +8,7 @@ commands:
     parameters:
       workflow_id: 
           type: string
-          default: ${CIRLECI_WORKFLOW_ID:0:7}
+          default: ${CIRCLECI_WORKFLOW_ID:0:7}
       # Add parameter here   
     steps:
       - run:
@@ -147,16 +147,16 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=your-tag \
-              --stack-name udapeople-backend-${CIRLECI_WORKFLOW_ID:0:7} \
-              --parameter-overrides ID=${CIRLECI_WORKFLOW_ID:0:7}  
+              --stack-name udapeople-backend-${CIRCLECI_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLECI_WORKFLOW_ID:0:7}  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=your-tag \
-              --stack-name "udapeople-frontend-${CIRLECI_WORKFLOW_ID:0:7} \
-              --parameter-overrides ID=${CIRLECI_WORKFLOW_ID:0:7}       
+              --stack-name "udapeople-frontend-${CIRCLECI_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLECI_WORKFLOW_ID:0:7}       
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -170,7 +170,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
       destroy-environment:
-          workflow_id: ${CIRLECI_WORKFLOW_ID:0:7}   
+          workflow_id: ${CIRCLECI_WORKFLOW_ID:0:7}   
 
   configure-infrastructure:
     docker:
