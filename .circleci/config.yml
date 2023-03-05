@@ -9,7 +9,7 @@ commands:
       workflow_id: 
           type: string
           default: ${CIRCLECI_WORKFLOW_ID:0:7}
-      # Add parameter here   
+      # Ad parameter here   
     steps:
       - run:
           name: Destroy environments
