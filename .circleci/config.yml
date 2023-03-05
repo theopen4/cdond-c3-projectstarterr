@@ -140,43 +140,73 @@ jobs:
     steps:
       - checkout
       - run: yum install -y tar gzip
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project=your-tag \
+              --stack-name udapeople-backend-${CIRCLECI_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLECI_WORKFLOW_ID:0:7}  
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=your-tag \
+              --stack-name "udapeople-frontend-${CIRCLECI_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLECI_WORKFLOW_ID:0:7}       
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            echo $(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRLECI_WORKFLOW_ID:0:7} \
+              --output text) >> ~/project/.circleci/ansible/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      # Here's where you will add some code to rollback on failure  
+      destroy-environment:
+          workflow_id: ${CIRCLECI_WORKFLOW_ID:0:7} 
         
 
-  configure-infrastructure:
-    docker:
-      # Docker image here that supports Ansible
-    steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
-      - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            exit 1
-      - run:
-          name: Configure server
-          command: |
-            # Your code here
-            exit 1
-      # Here's where you will add some code to rollback on failure      
+  # configure-infrastructure:
+  #   docker:
+  #     # Docker image here that supports Ansible
+  #   steps:
+  #     # Checkout code from git
+  #     # Add ssh keys with fingerprint
+  #     # attach workspace
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     - run:
+  #         name: Configure server
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     # Here's where you will add some code to rollback on failure      
 
-  run-migrations:
-    docker:
-      # Docker image here that supports NodeJS
-    steps:
-      # Checkout code from git
-      - run:
-          name: Run migrations
-          command: |
-            # Your code here
-            exit 1
-      - run:
-          name: Send migration results to memstash
-          command: |
-            # Your code here
-            exit 1
-     # Here's where you will add some code to rollback on failure      
+  # run-migrations:
+  #   docker:
+  #     # Docker image here that supports NodeJS
+  #   steps:
+  #     # Checkout code from git
+  #     - run:
+  #         name: Run migrations
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     - run:
+  #         name: Send migration results to memstash
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #    # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
     docker:
