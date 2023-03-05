@@ -144,10 +144,10 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-              aws cloudformation deploy \
+            aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=yo-ur-tag \
-              -stack-name udapeople-backend-${CIRLECI_WORKFLOW_ID:0:7} \
+              --stack-name udapeople-backend-${CIRLECI_WORKFLOW_ID:0:7} \
               --parameter-overrides ID=${CIRLECI_WORKFLOW_ID:0:7}  
       - run:
           name: Ensure front-end infrastructure exist
