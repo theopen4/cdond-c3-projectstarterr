@@ -146,7 +146,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=yo-ur-tag \
+              --tags project=your-tag \
               --stack-name udapeople-backend-${CIRLECI_WORKFLOW_ID:0:7} \
               --parameter-overrides ID=${CIRLECI_WORKFLOW_ID:0:7}  
       - run:
