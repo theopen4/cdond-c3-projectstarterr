@@ -14,32 +14,31 @@ commands:
               aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
               aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
               aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-#   revert-migrations:
-#     description: Revert the last migration if successfully run in the current workflow.
-#     steps:
-#       - run:
-#           name: Revert migrations
-#           when: on_fail
-#           command: |
-#             cd ~/project/backend
-#             npm install
-#             npm run build
-#             npm run migrations:revert
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            cd ~/project/backend
+            npm install
+            npm run build
+            npm run migrations:revert
 
-# docker_image1: &node_image
-#   docker:
-#       - image: circleci/node:13.8.0
-# docker_image3: &aws_image
-#   docker:
-#       - image: amazon/aws-cli
-# docker_image4: &ansible_image
-#   docker:
-#       - image: python:3.7-alpine3.16
+docker_image1: &node_image
+  docker:
+      - image: circleci/node:13.8.0
+docker_image3: &aws_image
+  docker:
+      - image: amazon/aws-cli
+docker_image4: &ansible_image
+  docker:
+      - image: python:3.7-alpine3.16
 
 jobs:
   build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -55,8 +54,7 @@ jobs:
           key: frontend-build
 
   build-backend:
-    docker:
-      - image: circleci/node:13.8.0 
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -72,8 +70,7 @@ jobs:
           key: backend-build
 
   test-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -86,8 +83,7 @@ jobs:
             npm run build
 
   test-backend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -100,8 +96,7 @@ jobs:
             npm run build
 
   scan-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -115,8 +110,7 @@ jobs:
             npm update js-yaml --depth 4
 
   scan-backend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node_image
     steps:
       - checkout
       - restore_cache:
@@ -131,8 +125,7 @@ jobs:
             npm update path-parse --depth 3
 
   deploy-infrastructure:
-    docker:
-      - image: amazon/aws-cli
+    <<: *aws_image
     steps:
       - checkout
       - run:
@@ -188,7 +181,7 @@ jobs:
       steps:
         - checkout
         - add_ssh_keys:
-            fingerprints: ["fc:be:0c:b1:03:74:da:0b:97:19:9e:1a:2c:9c:be:0b"]
+            fingerprints: ["96:9f:69:bf:88:57:05:8e:52:1a:07:e4:4a:f7:9f:f5"]
         - attach_workspace:
             at: ~/
         - run:
@@ -284,7 +277,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-            fingerprints: ["96:9f:69:bf:88:57:05:8e:52:1a:07:e4:4a:f7:9f:f5"]
+            fingerprints: ["fc:be:0c:b1:03:74:da:0b:97:19:9e:1a:2c:9c:be:0b"]
       - attach_workspace:
           at: ~/
       - restore_cache:
