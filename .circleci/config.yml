@@ -115,7 +115,8 @@ jobs:
             npm update js-yaml --depth 4
 
   scan-backend:
-    <<: *node_image
+    docker:
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
