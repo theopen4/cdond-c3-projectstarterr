@@ -393,7 +393,7 @@ workflows:
       #     requires: [build-frontend]
       - deploy-infrastructure:
           requires:
-          [build-backend, build-frontend]
+             [build-backend, build-frontend]
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters: 
           #   branches:
